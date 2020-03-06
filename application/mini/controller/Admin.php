@@ -21,11 +21,14 @@ class Admin extends Controller
         $pwd = input("pwd");
         if ($user == null || $pwd == null)
             return 1;
+        $isExist = Db::query("select user_id from user where user_user= ? and user_password = ?", [$user, $pwd]);
+        if ($isExist == null)
+            return 0;
         $isPass = Db::Query("select equipment_id FROM equipment_user WHERE user_id = (SELECT user_id from `user` 
                                     WHERE user_user= ? and user_password = ?) ", [$user, $pwd]);
         if ($isPass != null)
             return $isPass[0]['equipment_id'];
-        return 0;
+        return -1;
     }
 
     /**
