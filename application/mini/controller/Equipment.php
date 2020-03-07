@@ -37,6 +37,9 @@ class Equipment
         $latitude = rand(3111, 3500) / 100.0 + rand(0, 10000) * 0.0001;
         $longitude = rand(10577, 11500) / 100.0 + rand(0, 10000) * 0.0001;
         $user_name = input('userName');
+        if($equipment_name==null ||$user_name==null){
+            return -1;
+        }
         $user_id  = Db::table('user')->where('user_user',$user_name)->value('user_id');
         $data = [
             'equipment_name'=>$equipment_name,
