@@ -58,6 +58,27 @@ class Admin extends Controller
         }
     }
 
+    /**
+     * @return int 0无异常
+     * 否则返回异常图片的url
+     */
+    public function isAbnormal(){
+        $user = input("user");
+        $result = Db::table('abnormal')->where('abnormal_user',$user)->column('abnormal_image_url');
+        if ($result){
+            return $result[0]['abnormal_image_url'];
+        }else{
+            return 0;
+        }
+    }
 
-
+    /**
+     * 删除用户异常
+     *  1 删除成功
+     *  0 删除失败
+     */
+    public function delAbnormal(){
+        $user = input("user");
+        return Db::table('abnormal')->delete($user);
+    }
 }
