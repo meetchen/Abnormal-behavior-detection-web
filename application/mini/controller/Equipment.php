@@ -19,7 +19,7 @@ class Equipment
             $result = Db::table('equipment')->where('equipment_id',$equipmentId)->select();
             if ($result == null)
                 return 1;
-            return json($result);
+            return json($result[0]);
         }catch (Exception $exception){
             return 1;
         }
