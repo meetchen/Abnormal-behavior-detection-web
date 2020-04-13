@@ -62,12 +62,13 @@ class Admin extends Controller
      * @return int 0无异常
      * 否则返回异常图片的url
      */
-    public function isAbnormal(){
+    public function isAbnormal()
+    {
         $user = input("user");
-        $result = Db::table('abnormal')->where('abnormal_user',$user)->column('abnormal_image_url');
-        if ($result){
+        $result = Db::table('abnormal')->where('abnormal_user', $user)->column('abnormal_image_url');
+        if ($result) {
             return $result[0]['abnormal_image_url'];
-        }else{
+        } else {
             return 0;
         }
     }
@@ -77,7 +78,8 @@ class Admin extends Controller
      *  1 删除成功
      *  0 删除失败
      */
-    public function delAbnormal(){
+    public function delAbnormal()
+    {
         $user = input("user");
         return Db::table('abnormal')->delete($user);
     }
@@ -86,16 +88,20 @@ class Admin extends Controller
      * 存储用户评价
      * @return int 0 成功  1 失败
      */
-    public function userComment(){
-        $userId = input("user_id");
-        $userComment = input("user_comment");
-        try{
-            if (db::name("user_comment")->insert(['user_id'=>$userId,'user_comment'=>$userComment])==1){
+    public function userComment()
+    {
+        $userName = input("userName");
+        $userComment = input("userComment");
+        $now = date('Y-m-d H:i:s', time());
+        dump($now);
+        try {
+            if (db::name("user_comment")->insert(['user_name' => $userName, 'user_comment' => $userComment,
+                    'comment_time' => $now]) == 1) {
                 return 0;
-            }else{
+            } else {
                 return 1;
             }
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             return 1;
         }
     }
@@ -105,12 +111,13 @@ class Admin extends Controller
      * @return array|int  1 表示异常或不存在用户评价信息
      *                     或返回用户评价 数组
      */
-    public function  selectUserComment(){
-        $userId = input("user_id");
-        try{
-            $result = db::table("user_comment")->where('user_id',$userId)->column("user_comment");
-            return $result;
-        }catch (Exception $exception){
+    public function selectUserComment()
+    {
+        $userName = input("userName");
+        try {
+            $result = Db::query("select user_comment,comment_time from user_comment where user_name = ?",[$userName]);
+            return json($result);
+        } catch (Exception $exception) {
             return 1;
         }
 
