@@ -81,4 +81,38 @@ class Admin extends Controller
         $user = input("user");
         return Db::table('abnormal')->delete($user);
     }
+
+    /**
+     * 存储用户评价
+     * @return int 0 成功  1 失败
+     */
+    public function userComment(){
+        $userId = input("user_id");
+        $userComment = input("user_comment");
+        try{
+            if (db::name("user_comment")->insert(['user_id'=>$userId,'user_comment'=>$userComment])==1){
+                return 0;
+            }else{
+                return 1;
+            }
+        }catch (Exception $exception){
+            return 1;
+        }
+    }
+
+    /**
+     * 查询用户评价信息
+     * @return array|int  1 表示异常或不存在用户评价信息
+     *                     或返回用户评价 数组
+     */
+    public function  selectUserComment(){
+        $userId = input("user_id");
+        try{
+            $result = db::table("user_comment")->where('user_id',$userId)->column("user_comment");
+            return $result;
+        }catch (Exception $exception){
+            return 1;
+        }
+
+    }
 }
